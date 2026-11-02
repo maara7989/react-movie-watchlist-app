@@ -1,0 +1,118 @@
+.watchlist {
+  background: #12131e;
+  border: 1px solid #262a40;
+  border-radius: 14px;
+  padding: 1.25rem;
+  color: #f1f1f1;
+  height: fit-content;
+  position: sticky;
+  top: 1rem;
+  animation: slide-in 0.5s ease both;
+  box-shadow: 0 10px 25px -12px rgba(0, 0, 0, 0.6);
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 1rem;
+    font-size: 1.2rem;
+  }
+
+  &__count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.6rem;
+    height: 1.6rem;
+    padding: 0 0.3rem;
+    border-radius: 999px;
+    background: #1d4ed8;
+    color: #fff;
+    font-size: 0.85rem;
+    animation: count-pop 0.3s ease;
+  }
+
+  &__empty {
+    color: #a0a4b8;
+    font-size: 0.9rem;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #1a1c2c;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    opacity: 0;
+    animation: item-in 0.4s ease forwards;
+
+    &-info small {
+      color: #a0a4b8;
+    }
+  }
+
+  &__remove {
+    border: none;
+    background: #b42e33;
+    color: #fff;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background 0.2s ease, transform 0.15s ease;
+
+    &:hover {
+      background: #942327;
+    }
+
+    &:active {
+      transform: scale(0.93);
+    }
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes item-in {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes count-pop {
+  0% {
+    transform: scale(0.6);
+  }
+  60% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+

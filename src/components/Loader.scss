@@ -1,0 +1,60 @@
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 3rem 0;
+  color: #a0a4b8;
+  animation: fade-in-up 0.4s ease both;
+
+  &__spinner {
+    position: relative;
+    width: 56px;
+    height: 56px;
+
+    span {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 4px solid transparent;
+    }
+
+    span:first-child {
+      border-top-color: #1d4ed8;
+      border-right-color: #1d4ed8;
+      animation: spin 0.9s linear infinite;
+    }
+
+    span:last-child {
+      inset: 8px;
+      border-bottom-color: #ff6b6b;
+      animation: spin-reverse 1.2s linear infinite;
+    }
+  }
+
+  p {
+    animation: pulse-text 1.4s ease-in-out infinite;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-reverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes pulse-text {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
