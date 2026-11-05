@@ -1,5 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import './MovieCard.scss';
+
+const WIKIPEDIA_SUMMARY_URL = 'https://en.wikipedia.org/api/rest_v1/page/summary';
 
 const GENRE_THEME = {
   Action: { icon: '💥', gradient: 'linear-gradient(135deg, #ff5f6d, #2b0f14)' },
@@ -11,9 +14,37 @@ const GENRE_THEME = {
 const DEFAULT_THEME = { icon: '🎬', gradient: 'linear-gradient(135deg, #4f8cff, #141830)' };
 
 function MovieCard({ title, genre, year, rating, isInWatchlist, onAddToWatchlist, index = 0, posterUrl }) {
-  const [imageFailed, setImageFailed] = useState(false);
+  const [realPoster, setRealPoster] = useState(null);
+  const [realPosterFailed, setRealPosterFailed] = useState(false);
   const theme = GENRE_THEME[genre] ?? DEFAULT_THEME;
-  const showFallback = !posterUrl || imageFailed;
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const findRealPoster = async () => {
+      for (const candidate of [title, `${title} (film)`]) {
+        try {
+          const { data } = await axios.get(`${WIKIPEDIA_SUMMARY_URL}/${encodeURIComponent(candidate)}`, {
+            timeout: 6000,
+          });
+          const image = data.originalimage?.source ?? data.thumbnail?.source;
+          if (image) {
+            if (!cancelled) setRealPoster(image);
+            return;
+          }
+        } catch {
+        }
+      }
+    };
+
+    void findRealPoster();
+    return () => {
+      cancelled = true;
+    };
+  }, [title]);
+
+  const activeSrc = realPoster && !realPosterFailed ? realPoster : posterUrl;
+  const showFallback = !activeSrc;
 
   return (
     <div className="movie-card" style={{ animationDelay: `${index * 0.06}s` }}>
@@ -23,10 +54,12 @@ function MovieCard({ title, genre, year, rating, isInWatchlist, onAddToWatchlist
         ) : (
           <img
             className="movie-card__poster-img"
-            src={posterUrl}
+            src={activeSrc}
             alt={`${title} poster`}
             loading="lazy"
-            onError={() => setImageFailed(true)}
+            onError={() => {
+              if (activeSrc === realPoster) setRealPosterFailed(true);
+            }}
           />
         )}
         <span className="movie-card__rating">⭐ {rating}</span>
